@@ -1,0 +1,11 @@
+//颜色
+$backColor:#ffffff;
+//字体
+
+//垂直居中
+@mixin vertical_center{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
