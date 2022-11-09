@@ -10,3 +10,11 @@ export interface PageDto{
     title?:string,
     updateTime?:string
 }
+
+export interface NfcDto{
+    code?:string,
+    title?:string,
+    subhead?:string,
+    img?:string,
+    audio?:string
+}

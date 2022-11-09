@@ -48,7 +48,7 @@
       </el-table-column>
     </el-table>
 
-    <page-form ref="pageForm"></page-form>
+    <nfc-form ref="nfcForm"></nfc-form>
   </div>
 </template>
 <script lang="ts" setup>
@@ -56,7 +56,7 @@ import {useRoute, useRouter} from "vue-router";
 import {nextTick, reactive, ref} from "vue";
 import {usePageStore} from "@/store/page";
 import {toTree} from "@/utils";
-import PageForm from "@/views/pageConfig/model/PageForm.vue";
+import NfcForm from "@/views/nfcConfig/model/NfcForm.vue";
 import {deletePage} from "@/api/page";
 import {ElMessage} from "element-plus";
 
@@ -68,14 +68,14 @@ const multipleSelection = ref<any[]>([])
 const pageStore = usePageStore()
 pageData = toTree(pageStore.pageData)
 
-const pageForm = ref<InstanceType<typeof PageForm>>()
+const nfcForm = ref<InstanceType<typeof NfcForm>>()
 
 const handleSelectionChange = (val:any[]) => {
   multipleSelection.value = val
 }
 
 const onAddPage = (val:object) => {
-  pageForm.value?.openForm(val,1)
+  nfcForm.value?.openForm(val,1)
 }
 
 const onDeletePage = (data:any) => {
@@ -95,15 +95,15 @@ const onDeletePage = (data:any) => {
 }
 
 const onRedactPage = (data:any) => {
-  pageForm.value?.openForm(data.row,2)
+  nfcForm.value?.openForm(data.row,2)
 }
 
 const onAddChildren = (data:any) =>{
-  pageForm.value?.openForm({ pid:data.row.id },1)
+  nfcForm.value?.openForm({ pid:data.row.id },1)
 }
 
 const onAddSibling = (data:any) =>{
-  pageForm.value?.openForm({ pid:data.row.pid },1)
+  nfcForm.value?.openForm({ pid:data.row.pid },1)
 }
 
 </script>
