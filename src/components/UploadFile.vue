@@ -1,7 +1,8 @@
 <template>
   <div class="index">
     <el-button @click="goFile" size="small" type="primary">
-      <el-icon><Plus /></el-icon>{{props.title}}
+      <el-icon><Plus /></el-icon>
+      {{state.ruleForm.documentFile ? props.succeedTitle : props.title}}
     </el-button>
     <input
       style="display: none"
@@ -26,18 +27,20 @@ import {ElMessage} from "element-plus";
 * multiple:是否支持多选
  */
 interface PropsType{
-  accept:string,
-  size:number,
-  modelValue:any,
-  multiple:boolean,
-  title:string
+  accept?:string,
+  size?:number,
+  modelValue?:any,
+  multiple?:boolean,
+  title?:string,
+  succeedTitle?:string,
 }
 const props = withDefaults(defineProps<PropsType>(),{
   accept:"image/*",
   size:10,
   value:'',
   multiple:false,
-  title:'上传文件'
+  title:'上传文件',
+  succeedTitle:'上传成功',
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -61,6 +64,7 @@ const goFile = () => {
 // 获取文件 这里是使用的 vue3.0 语法
 const uploadData = (e:any) => {
   let myE = window.event || e
+  console.log(myE.target.files)
   if (myE.target.files[0].size > props.size * 1024 * 1024) {
     // 限制文件上传大小
     ElMessage.error("上传单个文件大小不能超过 "+props.size+"M!");
@@ -68,8 +72,12 @@ const uploadData = (e:any) => {
     state.ruleForm.documentFile = myE.target.files[0]; // 文件赋值
     getBase64(state.ruleForm.documentFile).then(res => {
       emits('update:modelValue',res)
+      ElMessage({
+        message: myE.target.files[0].name,
+        type: 'success',
+      })
     },rej =>{
-      console.log(rej)
+      ElMessage.error(rej)
     })
   }
 };

@@ -18,3 +18,8 @@ export interface NfcDto{
     img?:string,
     audio?:string
 }
+
+export interface TablePaging{
+    count:number,
+    list:object[]
+}

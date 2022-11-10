@@ -28,12 +28,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="封面：" prop="img">
-            <upload-file v-model="form.img"></upload-file>
+            <upload-file v-model="form.img" title="选择封面"></upload-file>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="音频：" prop="audio">
-            <upload-file :size="50" accept="audio/*" v-model="form.audio"></upload-file>
+            <upload-file :size="50" accept="audio/*" v-model="form.audio" title="选择音频"></upload-file>
           </el-form-item>
         </el-col>
         <el-col :span="24" class="dialog-footer">
@@ -73,8 +73,6 @@ let form = reactive({
 const rules = reactive({
   code: [{ required: true, message: '请输入唯一值', trigger: 'change' }],
   title: [{ required: true, message: '请输入标题', trigger: 'change' }],
-  subhead: [{ required: true, message: '请输入副标题', trigger: 'change' }],
-  img: [{ required: true, message: '请上传封面', trigger: 'change' }],
   audio: [{ required: true, message: '请上传音频', trigger: 'change' }],
 })
 let show = ref(true)
@@ -109,42 +107,42 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     console.log(form)
-    // if (valid) {
-    //   console.log('submit!',form)
-    //   loading.value = true
-    //   if(myType === 1){
-    //     //新增
-    //     addNfc(<NfcDto>form).then(res => {
-    //       console.log(res)
-    //       loading.value = false
-    //       if(res.code === 200){
-    //         dialogFormVisible.value = false
-    //         ElMessage({
-    //           message: '成功',
-    //           type: 'success',
-    //         })
-    //         location.reload()
-    //       }
-    //     }).catch(err => {
-    //       loading.value = false
-    //     })
-    //   }else if (myType === 2){
-    //     //修改
-    //     updateNfc(<NfcDto>form).then(res => {
-    //       loading.value = false
-    //       if(res.code === 200){
-    //         dialogFormVisible.value = false
-    //         ElMessage({
-    //           message: '成功',
-    //           type: 'success',
-    //         })
-    //         location.reload()
-    //       }
-    //     }).catch(err => {
-    //       loading.value = false
-    //     })
-    //   }
-    // }
+    if (valid) {
+      console.log('submit!',form)
+      loading.value = true
+      if(myType === 1){
+        //新增
+        addNfc(<NfcDto>form).then(res => {
+          console.log(res)
+          loading.value = false
+          if(res.code === 200){
+            dialogFormVisible.value = false
+            ElMessage({
+              message: '成功',
+              type: 'success',
+            })
+            location.reload()
+          }
+        }).catch(err => {
+          loading.value = false
+        })
+      }else if (myType === 2){
+        //修改
+        updateNfc(<NfcDto>form).then(res => {
+          loading.value = false
+          if(res.code === 200){
+            dialogFormVisible.value = false
+            ElMessage({
+              message: '成功',
+              type: 'success',
+            })
+            location.reload()
+          }
+        }).catch(err => {
+          loading.value = false
+        })
+      }
+    }
   })
 }
 

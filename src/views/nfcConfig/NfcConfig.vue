@@ -4,7 +4,7 @@
       <el-button type="primary" @click="onAddPage({})">新增</el-button>
     </div>
     <el-table
-        :data="pageData"
+        :data="table.data"
         style="width: 100%;"
         max-height="100%"
         row-key="id"
@@ -13,11 +13,25 @@
     >
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column prop="title" label="标题" width="200"></el-table-column>
-      <el-table-column prop="icon" label="图标" width="180"></el-table-column>
-      <el-table-column prop="jurisdiction" label="权限" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="名称" width="200"></el-table-column>
-      <el-table-column prop="path" label="路由路径" width="auto"></el-table-column>
-      <el-table-column prop="component" label="组件路径" width="auto"></el-table-column>
+      <el-table-column prop="subhead" label="副标题" width="180"></el-table-column>
+      <el-table-column prop="code" label="唯一值" width="180" align="center"></el-table-column>
+      <el-table-column prop="img" label="封面" width="200">
+        <template #default="scope">
+          <el-image
+              style="width: 100px; height: 100px"
+              :src="scope.row.img"
+              :preview-src-list="[scope.row.img]"
+              fit="cover"
+              :lazy="true"
+              z-index="9999"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column prop="audio" label="音频" width="auto">
+        <template #default="scope">
+          <audio controls :src="scope.row.audio"/>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作" width="160" align="center">
         <template #default="scope">
           <el-button link type="primary" size="small" @click="onRedactPage(scope)">编辑</el-button>
@@ -47,39 +61,51 @@
         </template>
       </el-table-column>
     </el-table>
-
+    <paging-m @onChange="onChange" :total="table.total"></paging-m>
     <nfc-form ref="nfcForm"></nfc-form>
   </div>
 </template>
 <script lang="ts" setup>
-import {useRoute, useRouter} from "vue-router";
-import {nextTick, reactive, ref} from "vue";
-import {usePageStore} from "@/store/page";
-import {toTree} from "@/utils";
+import {reactive, ref} from "vue";
 import NfcForm from "@/views/nfcConfig/model/NfcForm.vue";
 import {deletePage} from "@/api/page";
 import {ElMessage} from "element-plus";
-
-const route = useRoute()
-const router = useRouter()
-
-let pageData = reactive([])
-const multipleSelection = ref<any[]>([])
-const pageStore = usePageStore()
-pageData = toTree(pageStore.pageData)
+import {deleteNfc} from "@/api/nfc";
+import {Get} from "@/api/table";
+import PagingM from "@/components/PagingM.vue";
+import {NfcDto, TablePaging} from "@/dto";
+import {bufferTransitionImg} from "@/utils";
 
 const nfcForm = ref<InstanceType<typeof NfcForm>>()
-
-const handleSelectionChange = (val:any[]) => {
-  multipleSelection.value = val
-}
-
 const onAddPage = (val:object) => {
   nfcForm.value?.openForm(val,1)
 }
 
+const multipleSelection = ref<any[]>([])
+const handleSelectionChange = (val:any[]) => {
+  multipleSelection.value = val
+}
+
+const table = reactive({
+  data:<NfcDto>[],
+  total:0
+})
+const url = reactive({
+  get:'/nfc'
+})
+
+const onChange = (data:any)=>{
+  Get(url.get,data).then(res => {
+    if(res.code === 200){
+      let data = <TablePaging>res.data
+      table.total = data.count
+      table.data = <NfcDto>data.list
+    }
+  })
+}
+
 const onDeletePage = (data:any) => {
-  deletePage(data.row.id).then(res => {
+  deleteNfc(data.row.id).then(res => {
     if(res.code === 200){
       ElMessage({
         message: '成功',

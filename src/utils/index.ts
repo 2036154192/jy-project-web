@@ -29,7 +29,14 @@ export function toTree(data:any) {
     return result
 }
 
+export const bufferTransitionImg = (buffer:any)=>{
+    let base64 = window.btoa(new Uint8Array(buffer.data).reduce((res, byte) => res + String.fromCharCode(byte), ''))
+    let image = "data:image/png;base64," + base64
+    return image
+}
+
 export default {
     getAssetsFile,
-    toTree
+    toTree,
+    bufferTransitionImg
 };

@@ -14,8 +14,8 @@ interface Result {
 interface ResultData<T = any> extends Result{
     data?:T
 }
-const URL: string = "http://8.136.203.217:1314/web"
-// const URL: string = "http://localhost:1314/web"
+// const URL: string = "http://8.136.203.217:1314/web"
+const URL: string = "http://localhost:1314/web"
 
 enum RequestEnums{
     TIMEOUT = 20000,
