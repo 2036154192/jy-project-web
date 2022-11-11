@@ -12,8 +12,8 @@
         @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column prop="title" label="标题" width="200"></el-table-column>
-      <el-table-column prop="subhead" label="副标题" width="180"></el-table-column>
+      <el-table-column prop="title" label="标题" width="200" align="center"></el-table-column>
+      <el-table-column prop="subhead" label="副标题" width="180" align="center"></el-table-column>
       <el-table-column prop="code" label="唯一值" width="180" align="center"></el-table-column>
       <el-table-column prop="img" label="封面" width="200">
         <template #default="scope">

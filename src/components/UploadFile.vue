@@ -71,6 +71,7 @@ const uploadData = (e:any) => {
   } else {
     state.ruleForm.documentFile = myE.target.files[0]; // 文件赋值
     getBase64(state.ruleForm.documentFile).then(res => {
+      console.log(res)
       emits('update:modelValue',res)
       ElMessage({
         message: myE.target.files[0].name,
